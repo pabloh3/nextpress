@@ -1,0 +1,30 @@
+{
+  "name": "wpconverted",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "sqlite3": "^5.1.7",
+    "uuid": "^10.0.0",
+    "express": "latest",
+    "path": "latest",
+    "fs": "latest",
+    "pug": "^3.0.2",
+    "util": "latest",
+    "url": "*",
+    "node:path": "built-in",
+    "node:url": "built-in"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

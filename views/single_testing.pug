@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title= siteTitle
+  body
+    header
+      h1= siteTitle
+    main
+      each post in posts
+        h1= post.title
+        div= post.content
+    footer
+      p &copy; #{currentYear} #{siteTitle}
