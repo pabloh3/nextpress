@@ -69,9 +69,9 @@ class Wpdb {
   /**
    * Initialize necessary properties or handle bootstrapping here.
    */
-  constructor() {
+  /*constructor() {
     // Initialization logic if needed
-  }
+  }*/
 
   /**
    * Count of rows affected by the last query.
