@@ -69,7 +69,7 @@ Page rendering is defined in the theme, so whether you use Next.js, React, or an
 
 ## Tracking Progress
 
-All files should have a JSDoc comment at the top of the file. You can view the documentation [here] (https://pabloh3.github.io/nextpress/index.html)
+All files should have a JSDoc comment at the top of the file. You can view the documentation [here](https://pabloh3.github.io/nextpress/index.html)
 WordPress core files are tracked in a SQLite database `project_files.db`, to know what has been translated, and what hasn't, with fields like:
 
 - **uuid**: Unique ID.
