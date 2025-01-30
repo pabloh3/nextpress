@@ -1,4 +1,32 @@
-import crypto from 'crypto';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: class-wpdb.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: class-wpdb.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import crypto from 'crypto';
 import fs from 'fs';
 // The 'mysql2' package is recommended to handle MySQL interactions with Node.js
 import { createConnection } from 'mysql2/promise';
@@ -97,7 +125,7 @@ class Wpdb {
   /**
    * Results of the last query.
    *
-   * @var {Array<Object>|null}
+   * @var {Array&lt;Object>|null}
    */
   lastResult = null;
 
@@ -116,14 +144,14 @@ class Wpdb {
   /**
    * Cached column info, for confidence checking data before inserting.
    *
-   * @var {Array<Object>}
+   * @var {Array&lt;Object>}
    */
   colMeta = [];
 
   /**
    * Calculated character sets keyed by table name.
    *
-   * @var {Object<string, string>}
+   * @var {Object&lt;string, string>}
    */
   tableCharset = {};
 
@@ -144,14 +172,14 @@ class Wpdb {
   /**
    * Saved info on the table column.
    *
-   * @var {Array<Object>}
+   * @var {Array&lt;Object>}
    */
   colInfo = [];
 
   /**
    * Log of queries that were executed, for debugging purposes.
    *
-   * @var {Array.<Array.<Array.<string|number|Object>>>}
+   * @var {Array&lt;Array&lt;[string, number, string, number, Object]>>}
    */
   queries = [];
 
@@ -202,7 +230,7 @@ class Wpdb {
   /**
    * List of WordPress per-site tables.
    *
-   * @var {Array<string>}
+   * @var {Array&lt;string>}
    */
   tables = [
     'posts',
@@ -220,28 +248,28 @@ class Wpdb {
   /**
    * List of deprecated WordPress tables.
    *
-   * @var {Array<string>}
+   * @var {Array&lt;string>}
    */
   oldTables = ['categories', 'post2cat', 'link2cat'];
 
   /**
    * List of WordPress global tables.
    *
-   * @var {Array<string>}
+   * @var {Array&lt;string>}
    */
   globalTables = ['users', 'usermeta'];
 
   /**
    * List of Multisite global tables.
    *
-   * @var {Array<string>}
+   * @var {Array&lt;string>}
    */
   msGlobalTables = ['blogs', 'blogmeta', 'signups', 'site', 'sitemeta', 'registration_log'];
 
   /**
    * List of deprecated WordPress Multisite global tables.
    *
-   * @var {Array<string>}
+   * @var {Array&lt;string>}
    */
   oldMsGlobalTables = ['sitecategories'];
 
@@ -385,7 +413,7 @@ class Wpdb {
   /**
    * Format specifiers for DB columns.
    *
-   * @var {Object<string, string>}
+   * @var {Object&lt;string, string>}
    */
   fieldTypes = {};
 
@@ -462,7 +490,7 @@ class Wpdb {
   /**
    * A list of incompatible SQL modes.
    *
-   * @var {Array<string>}
+   * @var {Array&lt;string>}
    */
   incompatibleModes = [
     'NO_ZERO_DATE',
@@ -524,7 +552,7 @@ class Wpdb {
    * @param {string} dbHost     Database host.
    */
   constructor(dbUser, dbPassword, dbName, dbHost) {
-    if (process.env.WP_DEBUG && process.env.WP_DEBUG_DISPLAY) {
+    if (process.env.WP_DEBUG &amp;&amp; process.env.WP_DEBUG_DISPLAY) {
       this.showErrors();
     }
 
@@ -560,7 +588,7 @@ class Wpdb {
    *
    * @param {string} charset The character set to check.
    * @param {string} collate The collation to check.
-   * @return {Object<string, string>} The most appropriate character set and collation to use.
+   * @return {Object&lt;string, string>} The most appropriate character set and collation to use.
    */
   determineCharset(charset, collate) {
     if (!this.dbh) {
@@ -577,7 +605,7 @@ class Wpdb {
         : collate.replace('utf8_', 'utf8mb4_');
     }
 
-    if (this.hasCapability('utf8mb4_520') && collate === 'utf8mb4_unicode_ci') {
+    if (this.hasCapability('utf8mb4_520') &amp;&amp; collate === 'utf8mb4_unicode_ci') {
       collate = 'utf8mb4_unicode_520_ci';
     }
 
@@ -595,10 +623,10 @@ class Wpdb {
     charset = charset || this.charset;
     collate = collate || this.collate;
 
-    if (this.hasCapability('collation') && charset) {
+    if (this.hasCapability('collation') &amp;&amp; charset) {
       let setCharsetSucceeded = true;
 
-      if (dbh && this.hasCapability('set_charset')) {
+      if (dbh &amp;&amp; this.hasCapability('set_charset')) {
         setCharsetSucceeded = dbh.execute(`SET NAMES ${charset}`);
       }
 
@@ -628,7 +656,7 @@ class Wpdb {
    *
    * If no modes are passed, it will ensure the current SQL server modes are compatible.
    *
-   * @param {Array<string>} [modes=[]] Optional A list of SQL modes to set.
+   * @param {Array&lt;string>} [modes=[]] Optional A list of SQL modes to set.
    */
   setSqlMode(modes = []) {
     if (!modes.length) {
@@ -683,7 +711,7 @@ class Wpdb {
         this[table] = prefixedTable;
       }
 
-      if (process.env.IS_MULTISITE && !this.blogId) {
+      if (process.env.IS_MULTISITE &amp;&amp; !this.blogId) {
         return oldPrefix;
       }
 
@@ -743,7 +771,7 @@ class Wpdb {
 
       blogId = Number(blogId);
 
-      if (process.env.MULTISITE && (blogId === 0 || blogId === 1)) {
+      if (process.env.MULTISITE &amp;&amp; (blogId === 0 || blogId === 1)) {
         return this.basePrefix;
       } else {
         return `${this.basePrefix}${blogId}_`;
@@ -768,7 +796,7 @@ class Wpdb {
    * @param {string} [scope='all'] Optional. Table scope: 'all', 'global', 'ms_global', 'blog', 'old'. Default 'all'.
    * @param {boolean} [prefix=true] Optional. Include table prefixes or not. Defaults true.
    * @param {number} [blogId=0] Optional. Blog ID to prefix. Used only when prefix is requested.
-   * @return {Object<string, string>|string[]} Table names. Keys are unprefixed names if prefix requested.
+   * @return {Object&lt;string, string>|string[]} Table names. Keys are unprefixed names if prefix requested.
    */
   tables(scope = 'all', prefix = true, blogId = 0) {
     let tables;
@@ -834,9 +862,9 @@ class Wpdb {
 
       if (!process.env.TEMPLATE_REDIRECT_DONE) {
         // Example translations 
-        const message = '<h1>Cannot select database</h1>' +
-                        `<p>The database server could be connected to (which means your username and password is okay) but the ${db} database could not be selected.</p>` +
-                        `<ul><li>Are you sure it exists?</li>`;
+        const message = '&lt;h1>Cannot select database&lt;/h1>' +
+                        `&lt;p>The database server could be connected to (which means your username and password is okay) but the ${db} database could not be selected.&lt;/p>` +
+                        `&lt;ul>&lt;li>Are you sure it exists?&lt;/li>`;
 
         // Preferably implement a proper error handling logic for your application
         console.log(message);
@@ -941,7 +969,7 @@ class Wpdb {
     const placeholderCount = ((splitQueryCount - 1) / 3);
 
     // If args were passed as an array, like in vsprintf(), unwrap them
-    const passedAsArray = (Array.isArray(args[0]) && args.length === 1);
+    const passedAsArray = (Array.isArray(args[0]) &amp;&amp; args.length === 1);
     if (passedAsArray) {
       args = args[0];
     }
@@ -952,13 +980,13 @@ class Wpdb {
     const argIdentifiers = [];
     const argStrings = [];
 
-    while (key < splitQueryCount) {
+    while (key &lt; splitQueryCount) {
       let placeholder = splitQuery[key];
 
       const format = placeholder.slice(1, -1);
       const type = placeholder.slice(-1);
 
-      if (type === 'f' && this.allowUnsafeUnquotedParameters &&
+      if (type === 'f' &amp;&amp; this.allowUnsafeUnquotedParameters &amp;&amp;
           // Checking the last character of split_query[key - 1]
           splitQuery[key - 1].slice(-1) === '%') {
 
@@ -967,7 +995,7 @@ class Wpdb {
         const s = splitQuery[key - 2] + splitQuery[key - 1];
         let k = 1;
         const l = s.length;
-        while (k <= l && s[l - k] === '%') {
+        while (k &lt;= l &amp;&amp; s[l - k] === '%') {
           ++k;
         }
 
@@ -991,7 +1019,7 @@ class Wpdb {
           } else {
             argIdentifiers.push(argID);
           }
-        } else if (type !== 'd' && type !== 'F') {
+        } else if (type !== 'd' &amp;&amp; type !== 'F') {
           // For ('s' === type), ensure string escaping is used as a safe default.
           const argnumPos = format.indexOf('$');
 
@@ -1002,7 +1030,7 @@ class Wpdb {
           }
 
           if (!this.allowUnsafeUnquotedParameters ||
-              (format === '' && splitQuery[key - 1].slice(-1) !== '%')) {
+              (format === '' &amp;&amp; splitQuery[key - 1].slice(-1) !== '%')) {
             placeholder = `'%${format}s'`;
           }
         }
@@ -1027,7 +1055,7 @@ class Wpdb {
       key = 2;
       argID = 0;
       // Parse again (only used when there is an error).
-      while (key < splitQueryCount) {
+      while (key &lt; splitQueryCount) {
         placeholder = splitQuery[key];
 
         const format = placeholder.slice(1, -1);
@@ -1060,7 +1088,7 @@ class Wpdb {
     const argsCount = args.length;
 
     if (argsCount !== placeholderCount) {
-      if (placeholderCount === 1 && passedAsArray) {
+      if (placeholderCount === 1 &amp;&amp; passedAsArray) {
         // If query expected one argument but got an array, log an error.
         console.warn('The query only expected one placeholder, but an array of multiple placeholders was sent.');
         return null;
@@ -1069,16 +1097,16 @@ class Wpdb {
         console.warn(`The query does not contain the correct number of placeholders (${placeholderCount}) for the arguments passed (${argsCount}).`);
 
         // If not enough arguments to match placeholders, return an empty string to prevent execution.
-        if (argsCount < placeholderCount) {
+        if (argsCount &lt; placeholderCount) {
           let maxNumberedPlaceholder = 0;
-          for (let i = 2, l = splitQueryCount; i < l; i += 3) {
+          for (let i = 2, l = splitQueryCount; i &lt; l; i += 3) {
             // Assume a preceding number is for a numbered placeholder, e.g. '%3$s'.
             const argnum = parseInt(splitQuery[i].slice(1), 10);
-            if (maxNumberedPlaceholder < argnum) {
+            if (maxNumberedPlaceholder &lt; argnum) {
               maxNumberedPlaceholder = argnum;
             }
           }
-          if (!maxNumberedPlaceholder || argsCount < maxNumberedPlaceholder) {
+          if (!maxNumberedPlaceholder || argsCount &lt; maxNumberedPlaceholder) {
             return '';
           }
         }
@@ -1114,7 +1142,7 @@ class Wpdb {
    * @return {string} Text in the form of a LIKE phrase. Not SQL safe until used with wpdb::prepare().
    */
   escLike(text) {
-    return text.replace(/[\\%_]/g, '\\$&');
+    return text.replace(/[\\%_]/g, '\\$&amp;');
   }
 
   /**
@@ -1167,7 +1195,7 @@ class Wpdb {
       const query = this.lastQuery; // Simulate htmlspecialchars usage
 
       console.log(`
-        <div id="error"><p class="wpdberror"><strong>WordPress database error:</strong> [${str}]<br /><code>${query}</code></p></div>
+        &lt;div id="error">&lt;p class="wpdberror">&lt;strong>WordPress database error:&lt;/strong> [${str}]&lt;br />&lt;code>${query}&lt;/code>&lt;/p>&lt;/div>
       `);
     }
   }
@@ -1300,18 +1328,18 @@ class Wpdb {
       if (allowBail) {
         console.error('Error establishing a database connection:', error);
 
-        if (process.env.WP_CONTENT_DIR && fs.existsSync(`${process.env.WP_CONTENT_DIR}/db-error.php`)) {
+        if (process.env.WP_CONTENT_DIR &amp;&amp; fs.existsSync(`${process.env.WP_CONTENT_DIR}/db-error.php`)) {
           require(`${process.env.WP_CONTENT_DIR}/db-error.php`);
           process.exit(1);
         }
 
-        const message = `<h1>Error establishing a database connection</h1>` +
-        `<ul>` +
-        `<li>Are you sure you have the correct username and password?</li>` +
-        `<li>Are you sure you have typed the correct hostname?</li>` +
-        `<li>Are you sure the database server is running?</li>` +
-        `</ul>` +
-        `<p>If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="https://wordpress.org/support/forums/">WordPress support forums</a>.</p>`;
+        const message = `&lt;h1>Error establishing a database connection&lt;/h1>` +
+        `&lt;ul>` +
+        `&lt;li>Are you sure you have the correct username and password?&lt;/li>` +
+        `&lt;li>Are you sure you have typed the correct hostname?&lt;/li>` +
+        `&lt;li>Are you sure the database server is running?&lt;/li>` +
+        `&lt;/ul>` +
+        `&lt;p>If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the &lt;a href="https://wordpress.org/support/forums/">WordPress support forums&lt;/a>.&lt;/p>`;
 
         this.bail(message, 'db_connect_fail');
         return false;
@@ -1359,11 +1387,11 @@ class Wpdb {
     */
     let pattern;
     if ((host.match(/:/g) || []).length > 1) {
-      pattern = /^(?:\[)?(?<host>[0-9a-fA-F:]+)(?:\]:(?<port>[\d]+))?/;
+      pattern = /^(?:\[)?(?&lt;host>[0-9a-fA-F:]+)(?:\]:(?&lt;port>[\d]+))?/;
       isIPv6 = true;
     } else {
       // Assume dealing with an IPv4 address.
-      pattern = /^(?<host>[^:/]*)(?::(?<port>[\d]+))?/;
+      pattern = /^(?&lt;host>[^:/]*)(?::(?&lt;port>[\d]+))?/;
     }
 
     const matches = host.match(pattern);
@@ -1391,18 +1419,18 @@ class Wpdb {
    */
   async checkConnection(allowBail = true) {
     // Check if the connection is alive, use appropriate mysql2 checking method.
-    if (this.dbh && (await this.dbh.query('DO 1')).length > 0) {
+    if (this.dbh &amp;&amp; (await this.dbh.query('DO 1')).length > 0) {
       return true;
     }
 
     if (process.env.WP_DEBUG) {
       const originalErrorReporting = process.env.ERROR_REPORTING;
-      process.env.ERROR_REPORTING = originalErrorReporting & ~console.error;
+      process.env.ERROR_REPORTING = originalErrorReporting &amp; ~console.error;
     }
 
-    for (let tries = 1; tries <= this.reconnectRetries; tries++) {
+    for (let tries = 1; tries &lt;= this.reconnectRetries; tries++) {
       // On the last try, re-enable warnings to see a single message.
-      if (this.reconnectRetries === tries && process.env.WP_DEBUG) {
+      if (this.reconnectRetries === tries &amp;&amp; process.env.WP_DEBUG) {
         process.env.ERROR_REPORTING = originalErrorReporting;
       }
 
@@ -1426,13 +1454,13 @@ class Wpdb {
       return false;
     }
 
-    const message = `<h1>Error reconnecting to the database</h1>` +
-      `<p>This means that the contact with the database server at <code>${this.dbHost}</code> was lost. This could mean your host's database server is down.</p>` +
-      `<ul>` +
-      `<li>Are you sure the database server is running?</li>` +
-      `<li>Are you sure the database server is not under particularly heavy load?</li>` +
-      `</ul>` +
-      `<p>If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="https://wordpress.org/support/forums/">WordPress support forums</a>.</p>`;
+    const message = `&lt;h1>Error reconnecting to the database&lt;/h1>` +
+      `&lt;p>This means that the contact with the database server at &lt;code>${this.dbHost}&lt;/code> was lost. This could mean your host's database server is down.&lt;/p>` +
+      `&lt;ul>` +
+      `&lt;li>Are you sure the database server is running?&lt;/li>` +
+      `&lt;li>Are you sure the database server is not under particularly heavy load?&lt;/li>` +
+      `&lt;/ul>` +
+      `&lt;p>If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the &lt;a href="https://wordpress.org/support/forums/">WordPress support forums&lt;/a>.&lt;/p>`;
 
     this.bail(message, 'db_connect_fail');
 
@@ -1465,7 +1493,7 @@ class Wpdb {
     // Log query call
     this.funcCall = `$db->query(${query})`;
 
-    if (this.checkCurrentQuery && !this.checkAscii(query)) {
+    if (this.checkCurrentQuery &amp;&amp; !this.checkAscii(query)) {
       const strippedQuery = this.stripInvalidTextFromQuery(query);
       this.flush();
 
@@ -1511,7 +1539,7 @@ class Wpdb {
 
     if (this.lastError) {
       // Clear insertId if failure follows an insert.
-      if (this.insertId && /^\s*(insert|replace)\s/i.test(query)) {
+      if (this.insertId &amp;&amp; /^\s*(insert|replace)\s/i.test(query)) {
         this.insertId = 0;
       }
 
@@ -1648,7 +1676,7 @@ class Wpdb {
    * @param {Array|string} [format=null] Optional. Array of formats mapped to each value in `data`.
    *                                    If string, format will be used for all values. Formats are '%d', '%f', '%s'.
    *                                    If omitted, all values in `data` default to strings unless specified.
-   * @return {Promise<number|boolean>} The number of rows inserted, or false on error.
+   * @return {Promise&lt;number|boolean>} The number of rows inserted, or false on error.
    */
   async insert(table, data, format = null) {
     return this._insertReplaceHelper(table, data, format, 'INSERT');
@@ -1661,7 +1689,7 @@ class Wpdb {
    * @param {Object} data
    * @param {Array|string} [format]
    * @param {string} type
-   * @return {Promise<number|boolean>} The number of rows affected or false on error.
+   * @return {Promise&lt;number|boolean>} The number of rows affected or false on error.
    */
   async _insertReplaceHelper(table, data, format, type) {
     // Method implementation including connection and insertion logic
@@ -1678,7 +1706,7 @@ class Wpdb {
    *                      Sending null sets column NULL; the format is ignored in this case.
    * @param {Array|string} [format=null] Optional. Array of formats for each value; '%d', '%f', '%s'.
    *                                    Defaults to strings unless specified.
-   * @return {Promise<number|boolean>} Number of rows affected, or false if error occurs.
+   * @return {Promise&lt;number|boolean>} Number of rows affected, or false if error occurs.
    */
   async replace(table, data, format = null) {
     return this._insertReplaceHelper(table, data, format, 'REPLACE');
@@ -1690,7 +1718,7 @@ class Wpdb {
    * @param {string} table Table name.
    * @param {Object} data Data to insert.
    * @param {Array|string} [format=null] Format of data.
-   * @return {Promise<number|boolean>} Rows affected.
+   * @return {Promise&lt;number|boolean>} Rows affected.
    */
   async replace(table, data, format = null) {
     return this._insertReplaceHelper(table, data, format, 'REPLACE');
@@ -1707,7 +1735,7 @@ class Wpdb {
    *                      Columns and values should be raw (not SQL escaped). Null will set column to NULL.
    * @param {Array|string} [format=null] Format(s) for each value in `data`. '%d', '%f', '%s'.
    * @param {string} [type='INSERT'] Type of operation. 'INSERT' or 'REPLACE'.
-   * @return {Promise<number|boolean>} The number of rows affected, or false on error.
+   * @return {Promise&lt;number|boolean>} The number of rows affected, or false on error.
    */
   async _insertReplaceHelper(table, data, format = null, type = 'INSERT') {
     this.insertId = 0;
@@ -1755,7 +1783,7 @@ class Wpdb {
    * @param {Array|string} [format=null] Optional. Formats for each value in data. '%d', '%f', '%s'.
    *                                    Defaults to strings unless specified.
    * @param {Array|string} [whereFormat=null] Optional. Formats for each value in where condition.
-   * @return {Promise<number|boolean>} The number of rows affected, or false on error.
+   * @return {Promise&lt;number|boolean>} The number of rows affected, or false on error.
    */
   async update(table, data, where, format = null, whereFormat = null) {
     if (!Array.isArray(data) || !Array.isArray(where)) {
@@ -1811,7 +1839,7 @@ class Wpdb {
    *                       Null value results in IS NULL, ignoring format.
    * @param {Array|string} [whereFormat=null] Formats for each value in WHERE.
    *                                          '%d', '%f', '%s'. Defaults to strings unless specified.
-   * @return {Promise<number|boolean>} Number of rows deleted, or false on error.
+   * @return {Promise&lt;number|boolean>} Number of rows deleted, or false on error.
    */
   async delete(table, where, whereFormat = null) {
     if (!Array.isArray(where)) {
@@ -1989,7 +2017,7 @@ class Wpdb {
     this.funcCall = `$db->get_var("${query}", ${x}, ${y})`;
 
     if (query) {
-      if (this.checkCurrentQuery && this.checkSafeCollation(query)) {
+      if (this.checkCurrentQuery &amp;&amp; this.checkSafeCollation(query)) {
         this.checkCurrentQuery = false;
       }
 
@@ -2003,7 +2031,7 @@ class Wpdb {
     }
 
     // Return the value or null.
-    return (values && values[x] !== undefined && values[x] !== '') ? values[x] : null;
+    return (values &amp;&amp; values[x] !== undefined &amp;&amp; values[x] !== '') ? values[x] : null;
   }
 
   // Other methods to safely query and retrieve database values...
@@ -2022,7 +2050,7 @@ class Wpdb {
     this.funcCall = `$db->get_row("${query}", ${output}, ${y})`;
 
     if (query) {
-      if (this.checkCurrentQuery && this.checkSafeCollation(query)) {
+      if (this.checkCurrentQuery &amp;&amp; this.checkSafeCollation(query)) {
         this.checkCurrentQuery = false;
       }
 
@@ -2059,11 +2087,11 @@ class Wpdb {
    *
    * @param {string|null} [query=null] SQL query or defaults to previous execution.
    * @param {number} [x=0] Column index to return, indexed from 0.
-   * @return {Array<*>} Query result column as an array indexed by row number.
+   * @return {Array&lt;*>} Query result column as an array indexed by row number.
    */
   async getCol(query = null, x = 0) {
     if (query) {
-      if (this.checkCurrentQuery && this.checkSafeCollation(query)) {
+      if (this.checkCurrentQuery &amp;&amp; this.checkSafeCollation(query)) {
         this.checkCurrentQuery = false;
       }
 
@@ -2073,7 +2101,7 @@ class Wpdb {
     const newArray = [];
     // Extract the column values.
     if (this.lastResult) {
-      for (let i = 0, j = this.lastResult.length; i < j; i++) {
+      for (let i = 0, j = this.lastResult.length; i &lt; j; i++) {
         newArray[i] = await this.getVar(null, x, i);
       }
     }
@@ -2096,7 +2124,7 @@ class Wpdb {
     this.funcCall = `$db->get_results("${query}", ${output})`;
 
     if (query) {
-      if (this.checkCurrentQuery && this.checkSafeCollation(query)) {
+      if (this.checkCurrentQuery &amp;&amp; this.checkSafeCollation(query)) {
         this.checkCurrentQuery = false;
       }
 
@@ -2228,7 +2256,7 @@ class Wpdb {
       const newCount = charsets.size;
       if (newCount === 1) {
         charset = [...charsets][0];
-      } else if (newCount === 2 && charsets.has('utf8') && charsets.has('utf8mb4')) {
+      } else if (newCount === 2 &amp;&amp; charsets.has('utf8') &amp;&amp; charsets.has('utf8mb4')) {
         charset = 'utf8';
       } else {
         charset = 'ascii';
@@ -2378,7 +2406,7 @@ class Wpdb {
    */
   checkAscii(inputString) {
     // Use available encoding checks or regular expressions for ASCII validation.
-    if (Buffer.isEncoding('ascii') && Buffer.from(inputString, 'ascii').toString('ascii') === inputString) {
+    if (Buffer.isEncoding('ascii') &amp;&amp; Buffer.from(inputString, 'ascii').toString('ascii') === inputString) {
       return true;
     }
     if (!/[^\\x00-\\x7F]/.test(inputString)) {
@@ -2480,7 +2508,7 @@ class Wpdb {
       let needsValidation = true;
       if (
         charset === 'latin1' ||
-        (value.ascii === undefined && this.checkAscii(value.value))
+        (value.ascii === undefined &amp;&amp; this.checkAscii(value.value))
       ) {
         truncateByByteLength = true;
         needsValidation = false;
@@ -2488,7 +2516,7 @@ class Wpdb {
 
       if (truncateByByteLength) {
         // Example: Using Buffer for safe operations
-        if (length !== false && Buffer.byteLength(value.value, 'utf8') > length) {
+        if (length !== false &amp;&amp; Buffer.byteLength(value.value, 'utf8') > length) {
           value.value = value.value.substring(0, length);
         }
         if (!needsValidation) {
@@ -2508,7 +2536,7 @@ class Wpdb {
 
         value.value = value.value.replace(regex, '$1');
 
-        if (length !== false && Buffer.from(value.value, 'utf8').length > length) {
+        if (length !== false &amp;&amp; Buffer.from(value.value, 'utf8').length > length) {
           value.value = value.value.slice(0, length);
         }
         continue;
@@ -2525,7 +2553,7 @@ class Wpdb {
       for (const [col, value] of Object.entries(data)) {
         if (value.db) {
           let charset = value.charset;
-          if (value.length && value.length.type === 'byte') {
+          if (value.length &amp;&amp; value.length.type === 'byte') {
             charset = 'binary';
           }
 
@@ -2694,7 +2722,7 @@ class Wpdb {
 
     const numFields = this.result.fields.length;
 
-    for (let i = 0; i < numFields; i++) {
+    for (let i = 0; i &lt; numFields; i++) {
       this.colInfo[i] = this.result.fields[i];
     }
   }
@@ -2749,7 +2777,7 @@ class Wpdb {
       let error = this.dbh ? this.dbh.error : (this.dbh.connectionError ? this.dbh.connectionError : '');
 
       if (error) {
-        console.error(`<p><code>${error}</code></p>
+        console.error(`&lt;p>&lt;code>${error}&lt;/code>&lt;/p>
 ${message}`);
       } else {
         console.error(message);
@@ -2796,7 +2824,7 @@ ${message}`);
     const wpVersion = getWPVersion();
 
     // Ensure the server meets the MySQL version requirement.
-    if (this.dbVersion() < requiredMySQLVersion) {
+    if (this.dbVersion() &lt; requiredMySQLVersion) {
       return new Error(`Error: WordPress ${wpVersion} requires MySQL ${requiredMySQLVersion} or higher`);
     }
   }
@@ -2835,9 +2863,9 @@ ${message}`);
 
     // Handling MariaDB version prefixes for older PHP versions.
     if (
-      dbVersion === '5.5.5' &&
-      dbServerInfo.includes('MariaDB') &&
-      parseInt(process.versions.node.split('.')[0]) < 8 // Checking Node.js major version for illustrative purposes
+      dbVersion === '5.5.5' &amp;&amp;
+      dbServerInfo.includes('MariaDB') &amp;&amp;
+      parseInt(process.versions.node.split('.')[0]) &lt; 8 // Checking Node.js major version for illustrative purposes
     ) {
       dbServerInfo = dbServerInfo.replace(/^5\.5\.5-(.*)/, '$1');
       dbVersion = dbServerInfo.replace(/[^0-9.].*/, '');
@@ -2891,3 +2919,26 @@ ${message}`);
 
   // Closing class WPDB and adding any final utilities...
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Wpdb.html">Wpdb</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Jan 30 2025 11:42:08 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

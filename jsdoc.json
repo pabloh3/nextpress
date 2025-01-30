@@ -1,0 +1,9 @@
+{
+    "source": {
+      "include": ["app", "config", "lib", "pages", "server", "src", "tests", "views", "wp-content", "wp-includes"],
+      "exclude": ["node_modules", "tests"]
+    },
+    "opts": {
+      "destination": "docs"
+    }
+  }
